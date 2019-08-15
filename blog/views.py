@@ -4,6 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 
 from blog.models import Tag, Post, Category
+from config.models import SideBar
 
 
 def post_list(request, category_id=None, tag_id=None):
@@ -22,6 +23,7 @@ def post_list(request, category_id=None, tag_id=None):
         'category': categoty,
         'tag': tag,
         'post_list': post_list,
+        'sidebars':SideBar.get_all(),
     }
 
     content.update(Category.get_navs())
@@ -43,6 +45,7 @@ def post_detail(request, post_id=None):
 
     content={
         'post':post,
+        'sidebars': SideBar.get_all(),
     }
 
     content.update(Category.get_navs())
