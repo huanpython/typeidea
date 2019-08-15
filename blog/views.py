@@ -3,14 +3,6 @@ from django.shortcuts import render
 
 # Create your views here.
 
-
-# def post_list(request,category_id=None,tag_id=None):
-#     content='post_list category_id={category_id}, tag_id={tag_id}'.format(
-#         category_id=category_id,
-#         tag_id=tag_id,
-#     )
-#
-#     return HttpResponse(content)
 from blog.models import Tag, Post, Category
 
 
@@ -20,30 +12,19 @@ def post_list(request, category_id=None, tag_id=None):
 
 
     if tag_id:
-        try:
-            tag=Tag.objects.get(id=tag_id)
-        except Tag.DoesNotExist:
-            post_list=[]
-        else:
-            post_list=tag.post_set.filter(status=Post.STATUS_NORMAL)
-
+        post_list, tag=Post.get_by_tag(tag_id)
+    elif category_id:
+        post_list, categoty=Post.get_by_categoty(category_id)
     else:
-        post_list=Post.objects.filter(status=Post.STATUS_NORMAL)
-
-        if category_id:
-            try:
-                categoty=Category.objects.get(id=category_id)
-            except Category.DoesNotExist:
-                categoty=None
-
-        else:
-            post_list=post_list.filter(category_id=category_id)
+        post_list=Post.latest_posts()
 
     content = {
         'category': categoty,
         'tag': tag,
         'post_list': post_list,
     }
+
+    content.update(Category.get_navs())
 
     return render(request, 'blog/list.html',context=content)
 
@@ -59,4 +40,10 @@ def post_detail(request, post_id=None):
     except Post.DoesNotExist:
         post=None
 
+
+    content={
+        'post':post,
+    }
+
+    content.update(Category.get_navs())
     return render(request,'blog/detail.html', context={'post':'post'})
