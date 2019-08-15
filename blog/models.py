@@ -129,6 +129,11 @@ class Post(models.Model):
         return queryset
 
 
+    @classmethod
+    def hot_posts(cls):
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')
+
+
 
 
 
