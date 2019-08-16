@@ -13,31 +13,10 @@ class CommonViewMixin:
     def get_content_data(self, **kwargs):
         context = super().get_content_data(**kwargs)
         context.update({
-            'sidebars':self.get_sidebars(),
+            'sidebars':SideBar.get_all(),
         })
         context.update(Category.get_navs())
         return context
-
-
-    def get_sidebars(self):
-        return SideBar.objects.filter(status=SideBar.STATUS_SHOW)
-
-    def get_navs(self):
-        categories = Category.objects.filter(status=Category.STATUS_NORMAL)
-        nav_categories = []
-        normal_categories = []
-        for cate in categories:
-            if cate.is_nav:
-                nav_categories.append(cate)
-            else:
-                normal_categories.append(cate)
-
-        return {
-            'navs': nav_categories,
-            'categories': normal_categories,
-        }
-
-
 
 
 class IndexView(CommonViewMixin , ListView):
