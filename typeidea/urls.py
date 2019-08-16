@@ -20,7 +20,7 @@ from django.urls import path
 
 from blog.views import IndexView, CategoryView, TagView, PostDetailView
 from config.views import links
-from typeidea import custom_site
+from typeidea.custom_site import custom_site
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -29,5 +29,5 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name='post-detail'),
     url(r'^links/$', links, name='links'),
     url(r'^super_admin/', admin.site.urls, name='super-admin'),
-    # url(r'^admin/', custom_site.urls, name='admin'),
+    url(r'^admin/', custom_site.urls, name='admin'),
 ]
